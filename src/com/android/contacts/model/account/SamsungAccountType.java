@@ -16,17 +16,13 @@
 
 package com.android.contacts.model.account;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.provider.ContactsContract.CommonDataKinds.Email;
-import android.provider.ContactsContract.CommonDataKinds.Event;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
-import android.provider.ContactsContract.CommonDataKinds.Relation;
 import android.provider.ContactsContract.CommonDataKinds.StructuredPostal;
 
 import com.android.contacts.R;
 import com.android.contacts.model.dataitem.DataKind;
-import com.android.contacts.util.CommonDateUtils;
 import com.android.contactsbind.FeedbackHelper;
 
 import com.google.common.collect.Lists;
@@ -167,62 +163,20 @@ public class SamsungAccountType extends BaseAccountType {
         return kind;
     }
 
-    private DataKind addDataKindRelation(Context context) throws DefinitionException {
-        DataKind kind = addKind(new DataKind(Relation.CONTENT_ITEM_TYPE,
-                R.string.relationLabelsGroup, 160, true));
-        kind.actionHeader = new RelationActionInflater();
-        kind.actionBody = new SimpleInflater(Relation.NAME);
+    @Override
+    protected DataKind addDataKindRelation(Context context) throws DefinitionException {
+        final DataKind kind = super.addDataKindRelation(context);
 
-        kind.typeColumn = Relation.TYPE;
-        kind.typeList = Lists.newArrayList();
-        kind.typeList.add(buildRelationType(Relation.TYPE_ASSISTANT));
-        kind.typeList.add(buildRelationType(Relation.TYPE_BROTHER));
-        kind.typeList.add(buildRelationType(Relation.TYPE_CHILD));
-        kind.typeList.add(buildRelationType(Relation.TYPE_DOMESTIC_PARTNER));
-        kind.typeList.add(buildRelationType(Relation.TYPE_FATHER));
-        kind.typeList.add(buildRelationType(Relation.TYPE_FRIEND));
-        kind.typeList.add(buildRelationType(Relation.TYPE_MANAGER));
-        kind.typeList.add(buildRelationType(Relation.TYPE_MOTHER));
-        kind.typeList.add(buildRelationType(Relation.TYPE_PARENT));
-        kind.typeList.add(buildRelationType(Relation.TYPE_PARTNER));
-        kind.typeList.add(buildRelationType(Relation.TYPE_REFERRED_BY));
-        kind.typeList.add(buildRelationType(Relation.TYPE_RELATIVE));
-        kind.typeList.add(buildRelationType(Relation.TYPE_SISTER));
-        kind.typeList.add(buildRelationType(Relation.TYPE_SPOUSE));
-        kind.typeList.add(buildRelationType(Relation.TYPE_CUSTOM).setSecondary(true)
-                .setCustomColumn(Relation.LABEL));
-
-        kind.defaultValues = new ContentValues();
-        kind.defaultValues.put(Relation.TYPE, Relation.TYPE_SPOUSE);
-
-        kind.fieldList = Lists.newArrayList();
-        kind.fieldList.add(new EditField(Relation.DATA, R.string.relationLabelsGroup,
-                FLAGS_RELATION));
+        kind.weight = 160;
 
         return kind;
     }
 
-    private DataKind addDataKindEvent(Context context) throws DefinitionException {
-        DataKind kind = addKind(new DataKind(Event.CONTENT_ITEM_TYPE,
-                R.string.eventLabelsGroup, 150, true));
-        kind.actionHeader = new EventActionInflater();
-        kind.actionBody = new SimpleInflater(Event.START_DATE);
+    @Override
+    protected DataKind addDataKindEvent(Context context) throws DefinitionException {
+        final DataKind kind = super.addDataKindEvent(context);
 
-        kind.typeColumn = Event.TYPE;
-        kind.typeList = Lists.newArrayList();
-        kind.dateFormatWithoutYear = CommonDateUtils.NO_YEAR_DATE_FORMAT;
-        kind.dateFormatWithYear = CommonDateUtils.FULL_DATE_FORMAT;
-        kind.typeList.add(buildEventType(Event.TYPE_BIRTHDAY, true).setSpecificMax(1));
-        kind.typeList.add(buildEventType(Event.TYPE_ANNIVERSARY, false));
-        kind.typeList.add(buildEventType(Event.TYPE_OTHER, false));
-        kind.typeList.add(buildEventType(Event.TYPE_CUSTOM, false).setSecondary(true)
-                .setCustomColumn(Event.LABEL));
-
-        kind.defaultValues = new ContentValues();
-        kind.defaultValues.put(Event.TYPE, Event.TYPE_BIRTHDAY);
-
-        kind.fieldList = Lists.newArrayList();
-        kind.fieldList.add(new EditField(Event.DATA, R.string.eventLabelsGroup, FLAGS_EVENT));
+        kind.weight = 150;
 
         return kind;
     }

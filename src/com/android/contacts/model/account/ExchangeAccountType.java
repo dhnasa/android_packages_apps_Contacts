@@ -274,22 +274,19 @@ public class ExchangeAccountType extends BaseAccountType {
         return kind;
     }
 
+    @Override
     protected DataKind addDataKindEvent(Context context) throws DefinitionException {
-        DataKind kind = addKind(new DataKind(Event.CONTENT_ITEM_TYPE, R.string.eventLabelsGroup,
-                Weight.EVENT, true));
-        kind.actionHeader = new EventActionInflater();
-        kind.actionBody = new SimpleInflater(Event.START_DATE);
+        final DataKind kind = super.addDataKindEvent(context);
 
         kind.typeOverallMax = 1;
 
-        kind.typeColumn = Event.TYPE;
         kind.typeList = Lists.newArrayList();
         kind.typeList.add(buildEventType(Event.TYPE_BIRTHDAY, false).setSpecificMax(1));
 
+        kind.dateFormatWithoutYear = null;
         kind.dateFormatWithYear = CommonDateUtils.DATE_AND_TIME_FORMAT;
 
-        kind.fieldList = Lists.newArrayList();
-        kind.fieldList.add(new EditField(Event.DATA, R.string.eventLabelsGroup, FLAGS_EVENT));
+        kind.defaultValues = null;
 
         return kind;
     }
